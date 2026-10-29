@@ -1,0 +1,62 @@
+name: Build and deploy blog
+
+on:
+  push:
+    branches:
+      - blog-page
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-blog
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 7.33.7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build site
+        run: pnpm build
+
+      - name: Publish generated site to master
+        env:
+          DEPLOY_DIR: ${{ runner.temp }}/atlasquan-blog
+        run: |
+          git worktree add "$DEPLOY_DIR" origin/master
+          rsync -a --delete --exclude='.git' public/ "$DEPLOY_DIR"/
+          touch "$DEPLOY_DIR/.nojekyll"
+
+          cd "$DEPLOY_DIR"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+
+          if git diff --cached --quiet; then
+            echo "Generated site is already up to date."
+            exit 0
+          fi
+
+          git commit -m "Deploy ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          git push origin HEAD:master
