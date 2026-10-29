@@ -1,5 +1,9 @@
 .DS_Store
 Thumbs.db
+.tool-versions
+.env
+.env.*
+!.env.example
 db.json
 *.log
 node_modules/
