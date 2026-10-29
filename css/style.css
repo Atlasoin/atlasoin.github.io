@@ -12,7 +12,16 @@ When setting the primary font stack, apply it to the Pure grid units along
 with `html`, `button`, `input`, `select`, and `textarea`. Pure Grids use
 specific font stacks to ensure the greatest OS/browser compatibility.
 */
-html, button, input, select, textarea,
+html,
+body {
+  height: 100%;
+}
+
+html,
+button,
+input,
+select,
+textarea,
 .MJXc-TeX-unknown-R,
 .pure-g [class*=pure-u] {
   /* Set your content font stack here: */
@@ -39,7 +48,8 @@ body {
   padding-top: 20px;
 }
 
-a, button.submit {
+a,
+button.submit {
   color: #6E7173;
   text-decoration: none;
   -webkit-transition: all 0.1s ease-in;
@@ -48,7 +58,8 @@ a, button.submit {
   transition: all 0.1s ease-in;
 }
 
-a:hover, a:active {
+a:hover,
+a:active {
   color: #444;
 }
 
@@ -122,6 +133,7 @@ div {
 }
 #sidebar .widget {
   margin-bottom: 30px;
+  /* tiered display categories */
 }
 #sidebar .widget .widget-title {
   color: #6E7173;
@@ -156,6 +168,9 @@ div {
   margin: 5px 0;
   line-height: 1.5;
 }
+#sidebar .widget ul li .wl-emoji {
+  width: 16px;
+}
 #sidebar .widget .category-list-count {
   padding-left: 5px;
   color: #6E7173;
@@ -165,6 +180,17 @@ div {
 }
 #sidebar .widget .category-list-count::after {
   content: ")";
+}
+#sidebar .widget .category-list-child li {
+  margin-left: 0.6em !important;
+  padding-left: 1em;
+  position: relative;
+}
+#sidebar .widget .category-list-child li::before {
+  content: "-";
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 #sidebar .widget .search-form {
   position: relative;
@@ -184,6 +210,20 @@ div {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+}
+#sidebar .widget .author-info {
+  text-align: center;
+}
+#sidebar .widget .author-info a.info-avatar img {
+  border-radius: 50%;
+  padding: 4px;
+  width: 96px;
+  height: 96px;
+  background-color: transparent;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+#sidebar .widget .author-info a.info-icon {
+  font-size: 25px;
 }
 
 /* title for search result or tagged posts*/
@@ -205,6 +245,19 @@ div {
 }
 .post .post-title a {
   color: #555;
+}
+.post .post-title .top-post {
+  font-weight: 400;
+  height: 32px;
+  padding: 0 6px;
+  margin-right: 5px;
+  line-height: 32px;
+  font-size: 16px;
+  white-space: nowrap;
+  vertical-align: 2px;
+  color: #fff;
+  background-image: -webkit-linear-gradient(0deg, #3742fa 0, #a86af9 100%);
+  border-radius: 2px 6px;
 }
 .post .post-meta {
   padding: 0;
@@ -273,12 +326,10 @@ div {
 }
 .post .post-content h2 {
   margin: 1.4em 0 1.1em;
-  font-size: 1.37em;
   border-bottom: 1px solid #eee;
   overflow: hidden;
 }
 .post .post-content h3 {
-  font-size: 1.13em;
   margin: 1.4em 0 1.1em;
 }
 .post .post-content pre code {
@@ -324,26 +375,31 @@ div {
   margin: auto;
   display: block;
 }
-.post .post-content ul, .post .post-content ol {
+.post .post-content ul,
+.post .post-content ol {
   border-radius: 3px;
   margin: 1em 0;
 }
-.post .post-content ul ul, .post .post-content ol ul {
+.post .post-content ul ul,
+.post .post-content ol ul {
   margin: 0;
 }
-.post .post-content ul code, .post .post-content ol code {
+.post .post-content ul code,
+.post .post-content ol code {
   display: inline-block;
   margin: 0 5px;
   padding: 0px 5px;
   background: #f7f8f8;
   font-family: Menlo, Consolas, monospace !important;
 }
-.post .post-content ul a, .post .post-content ol a {
+.post .post-content ul a,
+.post .post-content ol a {
   color: #01579f;
   padding-bottom: 2px;
   word-break: normal;
 }
-.post .post-content ul a:hover, .post .post-content ol a:hover {
+.post .post-content ul a:hover,
+.post .post-content ol a:hover {
   text-decoration: underline;
 }
 .post .post-content .tagcloud {
@@ -370,15 +426,10 @@ div {
   font-size: 16px;
   font-weight: bold;
 }
-.post .tags {
-  padding-bottom: 1em;
-}
 .post .tags a {
   margin-right: 0.5em;
 }
-.post .tags a:before {
-  font-family: "FontAwesome";
-  content: "\f0c6";
+.post .tags a i {
   padding-right: 0.3em;
 }
 
@@ -394,7 +445,8 @@ div {
   display: inline-block;
   margin: 0 5px 5px 0;
 }
-.page-navigator a, .page-navigator span {
+.page-navigator a,
+.page-navigator span {
   display: inline-block;
   height: 25px;
   line-height: 25px;
@@ -402,22 +454,27 @@ div {
   border: 1px solid #DDD;
   text-align: center;
 }
-.page-navigator a:hover, .page-navigator span:hover {
+.page-navigator a:hover,
+.page-navigator span:hover {
   background: #F8F8F8;
   border-bottom-color: #D26911;
 }
-.page-navigator a.prev, .page-navigator span.prev {
+.page-navigator a.prev,
+.page-navigator span.prev {
   float: left;
 }
-.page-navigator a.prev:before, .page-navigator span.prev:before {
+.page-navigator a.prev:before,
+.page-navigator span.prev:before {
   font-family: "FontAwesome";
   content: "\f100";
   padding-right: 0.3em;
 }
-.page-navigator a.next, .page-navigator span.next {
+.page-navigator a.next,
+.page-navigator span.next {
   float: right;
 }
-.page-navigator a.next:after, .page-navigator span.next:after {
+.page-navigator a.next:after,
+.page-navigator span.next:after {
   font-family: "FontAwesome";
   content: "\f101";
   padding-left: 0.3em;
@@ -495,7 +552,8 @@ div {
     padding-right: 0;
   }
 }
-blockquote, .stressed {
+blockquote,
+.stressed {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin: 2.5em 0;
@@ -504,7 +562,8 @@ blockquote, .stressed {
   border-left: none;
 }
 
-blockquote::before, .stressed-quote::before {
+blockquote::before,
+.stressed-quote::before {
   content: "“";
   display: block;
   font-family: times;
@@ -517,7 +576,9 @@ blockquote::before, .stressed-quote::before {
   position: absolute;
 }
 
-strong, b, em {
+strong,
+b,
+em {
   font-weight: bold;
 }
 
@@ -603,11 +664,14 @@ pre {
 
 #process .timeline-centered {
   position: relative;
+  min-height: 14px;
   margin-bottom: 30px;
 }
 
-#process .timeline-centered::before, #process .timeline-centered::after,
-#process .timeline-centered::before, #process .timeline-centered::after {
+#process .timeline-centered::before,
+#process .timeline-centered::after,
+#process .timeline-centered::before,
+#process .timeline-centered::after {
   content: " ";
   display: table;
 }
@@ -802,9 +866,9 @@ pre {
   display: block;
   width: 4px;
   background: #eee;
-  top: -3%;
+  top: -18px;
   right: -30px;
-  bottom: -3%;
+  bottom: -8px;
 }
 
 #process .present,
@@ -837,7 +901,7 @@ pre {
 
 #process .present {
   position: absolute;
-  top: -3%;
+  top: -18px;
   right: 0;
   margin-top: -20px;
   line-height: 100%;
@@ -845,7 +909,7 @@ pre {
 
 #process .born {
   position: absolute;
-  bottom: -3%;
+  bottom: -8px;
   right: 0;
   margin-bottom: -20px;
   line-height: 100%;
@@ -853,7 +917,7 @@ pre {
 
 #process .dot_tp {
   position: absolute;
-  top: -3%;
+  top: -18px;
   right: -35px;
   background-color: transparent;
   height: 15px;
@@ -867,7 +931,7 @@ pre {
 
 #process .dot_bt {
   position: absolute;
-  bottom: -3%;
+  bottom: -8px;
   right: -35px;
   background-color: transparent;
   height: 15px;
@@ -1492,15 +1556,9 @@ figure.highlight .line,
 .toc-article {
   border: 1px solid #bbb;
   border-radius: 7px;
+  margin: 1.1em 0 0 2em;
   padding: 0.7em 0.7em 0 0.7em;
   max-width: 40%;
-  margin: 1.1em 0 0 2em;
-}
-@media screen and (max-width: 550px) {
-  .toc-article {
-    max-width: 100%;
-    margin: 3.1em 0 0 0;
-  }
 }
 
 .toc-title {
@@ -1510,11 +1568,6 @@ figure.highlight .line,
 #toc {
   line-height: 1em;
   float: right;
-}
-@media screen and (max-width: 550px) {
-  #toc {
-    float: none;
-  }
 }
 #toc .toc {
   padding: 0;
@@ -1529,6 +1582,18 @@ figure.highlight .line,
   padding-left: 0;
 }
 
+@media print, screen and (max-width: 48em) {
+  .toc-article {
+    margin: 0em;
+    max-width: 100%;
+  }
+  .clear {
+    padding: 2.1em 0em 0em 0em;
+  }
+  #toc {
+    float: none;
+  }
+}
 /* table*/
 table {
   margin: auto auto 15px;
@@ -1705,35 +1770,213 @@ em.search-keyword {
   text-shadow: 0;
 }
 
-.post-copyright {
-  margin: 2em 0 0;
-  padding: 0.5em 1em;
-  border-left: 3px solid #FF1700;
-  background-color: #F9F9F9;
-  list-style: none;
+/* Footer Badge*/
+.github-badge {
+  display: inline-block;
+  border-radius: 4px;
+  text-shadow: none;
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.25;
+  background-color: #ABBAC3;
+  margin-bottom: 5px;
 }
-.post-copyright li {
-  margin: 8px 0;
+.github-badge a {
+  color: #fff;
+}
+.github-badge img {
+  /*height: "calc(%s * 1.25)" % $fontsize-footnote*/
+  height: 1.25em;
+  vertical-align: top;
+}
+.github-badge .badge-subject {
+  display: inline-block;
+  background-color: #555;
+  padding: 4px 4px 4px 6px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.github-badge .badge-value {
+  display: inline-block;
+  padding: 4px 6px 4px 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.github-badge .bg-brightgreen {
+  background-color: #4c1 !important;
+}
+.github-badge .bg-green {
+  background-color: #97ca00 !important;
+}
+.github-badge .bg-yellowgreen {
+  background-color: #a4a61d !important;
+}
+.github-badge .bg-orange {
+  background-color: #FE7D37 !important;
+}
+.github-badge .bg-yellow {
+  background-color: #dfb317 !important;
+}
+.github-badge .bg-blueviolet {
+  background-color: #8A2BE2 !important;
+}
+.github-badge .bg-pink {
+  background-color: #FFC0CB !important;
+}
+.github-badge .bg-red {
+  background-color: #e05d44 !important;
+}
+.github-badge .bg-blue {
+  background-color: #007EC6 !important;
+}
+.github-badge .bg-grey,
+.github-badge .bg-gray {
+  background-color: #555 !important;
+}
+.github-badge .bg-lightgrey,
+.github-badge .bg-lightgray {
+  background-color: #9f9f9f !important;
 }
 
-.quote {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 2.5em 0 2.5em 2em;
-  padding: 0 0 0 1em;
-  color: gray;
-  border-left: 2px solid lightgray;
+/* Waline CSS*/
+#waline {
+  /* 字体大小 */
+  --waline-font-size: 16px;
+  /* 常规颜色 */
+  --waline-white: #fff;
+  --waline-light-grey: #999;
+  --waline-dark-grey: #666;
+  /* 主题色 */
+  --waline-theme-color: #34495e;
+  --waline-active-color: #bababa;
+  /* 布局颜色 */
+  --waline-text-color: #444;
+  --waline-bgcolor: #fff;
+  --waline-bgcolor-light: #f8f8f8;
+  --waline-bgcolor-hover: #f0f0f0;
+  --waline-border-color: #ddd;
+  --waline-disable-bgcolor: #f8f8f8;
+  --waline-disable-color: #bbb;
+  --waline-code-bgcolor: #282c34;
+  /* 特殊颜色 */
+  --waline-bq-color: #f0f0f0;
+  /* 头像 */
+  --waline-avatar-size: 3.25rem;
+  --waline-mobile-avatar-size: calc(var(--waline-avatar-size) * 9 / 13);
+  /* 徽章 */
+  --waline-badge-color: #34495e;
+  --waline-badge-font-size: 0.775em;
+  /* 信息 */
+  --waline-info-bgcolor: #f8f8f8;
+  --waline-info-color: #999;
+  --waline-info-font-size: 0.625em;
+  /* 渲染选择 */
+  --waline-border: 1px solid var(--waline-border-color);
+  --waline-avatar-radius: 50%;
+  --waline-box-shadow: none;
 }
 
-.quote::before {
-  content: "";
+/* Darkmode CSS*/
+html[data-dark=true] {
+  background-color: #121212 !important;
+  filter: invert(100%) hue-rotate(180deg) brightness(105%) contrast(85%);
+  -webkit-filter: invert(100%) hue-rotate(180deg) brightness(105%) contrast(85%);
+}
+html[data-dark=true] img {
+  filter: hue-rotate(180deg) contrast(100%) invert(100%);
+  -webkit-filter: hue-rotate(180deg) contrast(100%) invert(100%);
+}
+
+.darkmode-toggle {
+  background: #a2a2a2;
+  width: 3rem;
+  height: 3rem;
+  position: fixed;
+  z-index: 999;
+  border-radius: 50%;
+  left: 32px;
+  bottom: 32px;
+  right: unset;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Links Layout*/
+.link-items {
+  display: flex;
+  text-align: center;
+  justify-content: left;
+  flex-wrap: wrap;
+  padding: 0px 0.5rem;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 20px;
+}
+.link-items .link-item {
+  display: inline-flex;
+  --primary-color: #444;
+}
+.link-items .link-item .link-url {
+  display: inline-flex;
+  text-align: center;
+  justify-self: center;
+  line-height: 1.5;
+  width: 15rem;
+  color: var(--primary-color, #000);
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  transition: all 0.2s ease 0s;
+}
+.link-items .link-item .link-url .link-left {
+  display: inline-block;
+  line-height: 0;
+}
+.link-items .link-item .link-url .link-left .link-avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  transition: all 0.5s ease 0s;
+}
+.link-items .link-item .link-url .link-info {
+  padding-left: 0.6rem;
   display: block;
-  font-family: times;
-  font-style: normal;
-  font-size: 48px;
-  color: lightgray;
-  font-weight: bold;
-  line-height: 30px;
-  margin-left: -50px;
-  position: absolute;
+}
+.link-items .link-item .link-url .link-info .link-blog {
+  font-size: 1.24rem;
+  font-weight: 700;
+  margin: 0.42rem 0px;
+}
+.link-items .link-item .link-url .link-info .link-desc {
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin-top: 0.5rem;
+  width: 10.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Recent-comments Waline Style*/
+.waline-comment-content {
+  margin: 6px;
+  padding: 6px;
+  border-radius: 6px;
+}
+.waline-comment-content p {
+  margin: 0;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /*这里设置第几行显示省略号，可以设置第一行或者其他行*/
+}
+
+.waline-comment-content-author {
+  text-align: end;
+  margin-bottom: 6px;
 }

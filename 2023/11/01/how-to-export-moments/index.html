@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>如何导出朋友圈数据 | Atlas' Blog</title><link rel="stylesheet" type="text/css" href="../../../../css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="../../../../favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="../../../../favicon.ico"><link rel="apple-touch-icon" href="../../../../apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="../../../../apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="../../../../atom.xml"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">如何导出朋友圈数据</h1><a id="logo" href="../../../../.">Atlas' Blog</a><p class="description">三七的深夜食堂</p></div><div id="nav-menu"><a class="current" href="../../../../."><i class="fa fa-home"> 首页</i></a><a href="../../../../archives/"><i class="fa fa-archive"> 归档</i></a><a href="../../../../about/"><i class="fa fa-user"> 关于</i></a><a href="../../../../atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">如何导出朋友圈数据</h1><div class="post-meta">2023-11-01</div><a class="disqus-comment-count" data-disqus-identifier="2023/11/01/how-to-export-moments/" href="#disqus_thread"></a><div class="post-content"><p>最终我成功的在 ios 系统中从 8.0.32 版本的微信里导出了自己的朋友圈数据。</p>
+<p>我研究这件事的原因是在 2023.2.4 我的微信被封之后，我想要把自己的朋友圈内容导出来并重新展示。期间我搜索过不少资料，但是都是版本比较早的解决方法了。所以我觉得现在应该把自己的探索，和踩过的坑也记录下来。</p>
+<p>提前声明：</p>
+<ol>
+<li>我没有导出评论数据。因为我觉得没必要，但是如果真的有需求实现起来应该也不会太麻烦，我看到 MyWC_Message01 这张表里有明文存储的评论，但不确定是否是完整的，如果有需求可以对照着本篇教程自己继续研究。</li>
+<li>我没有导出别人的朋友圈数据，同理没必要。但不难推测如果需要导出的话应该从哪张表入手。</li>
+<li>我没有导出微信好友&#x2F;聊天记录。我猜这可能一个常见的需求，但这方面我需求不大所以没有研究这个，不过大概率就是换张表导数据，不会很麻烦的。</li>
+<li>我没有解析出视频号的分享。普通的链接分享是可以解析出来的，但是视频号实在过于迷雾重重，难以恢复出真实视频链接，而且我也很少转发视频号，没有太多解析这个的需求。</li>
+</ol>
+<h2 id="明确目标：导出朋友圈数据"><a href="#明确目标：导出朋友圈数据" class="headerlink" title="明确目标：导出朋友圈数据"></a>明确目标：导出朋友圈数据</h2><p>假定现在的需求就是导出朋友圈数据，那么其实也分好几种情况，不同情况有不同的方法：</p>
+<ul>
+<li>如果你是 WeChat User（而非微信用户），那么官方是提供导出数据接口的</li>
+<li>如果是微信用户<ul>
+<li>如果你的微信没有被封，可以试试淘宝搜索“微信朋友圈”，有很多把你的微信朋友圈导出做成电子书之类的服务（其实我还挺好奇淘宝商家是怎么做的，不知道是不是也是通过缓存）</li>
+<li>如果你的微信也和我一样被封了，或者虽然没有被封但是也对怎么导出数据很感兴趣，也可以试试接下来我会重点介绍的从手机缓存中恢复数据的这种方法。这个方法可行的原因是虽然微信账号被封了，但是自己还是可以访问自己的朋友圈的（万幸）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="缓存恢复数据法"><a href="#缓存恢复数据法" class="headerlink" title="缓存恢复数据法"></a>缓存恢复数据法</h2><p>顾名思义，此思路的方法是先确保微信本地已经把自己的朋友圈缓存了，然后把自己手机的数据导出，最后从导出的数据中找到相关的文件，然后从相关文件中提取出有用信息，如发布时间，朋友圈内容等，最后拼凑还原出完整的朋友圈数据。</p>
+<h3 id="1-本地缓存"><a href="#1-本地缓存" class="headerlink" title="1. 本地缓存"></a>1. 本地缓存</h3><p>打开微信，清空一下缓存（此步非必须，但是可以减少备份和拷贝所需的等待时间），然后打开自己的朋友圈，往下翻到最早的一条，将自己所有的朋友圈缓存到本地，每张图也都需要打开，不然缓存的只有缩略图。为了确保全部缓存成功，可以翻页完成之后断网确认是否还能看到，能看到意味着已经缓存成功。</p>
+<h3 id="2-导出缓存文件"><a href="#2-导出缓存文件" class="headerlink" title="2. 导出缓存文件"></a>2. 导出缓存文件</h3><p>因为我的微信是在 ios 系统上登陆的，被封号之后我不确定是否还能在别的设备上登录了（担心夜长梦多，如果尝试次数太多本身能登录的 ios 设备也登不上去了就得不偿失了），所以只能通过手机备份的方式导出缓存。安卓系统应该可以直接导出缓存文件，但是 ios 的机制是不能直接访问 App 自己的缓存文件的，所以必须通过手机整体备份的方式。</p>
+<p>我使用的工具是 iMazing，免费版的就够。首先备份手机数据，然后找到微信的 Documents 文件，导出即可，步骤如下图。免费版 iMazing 有 10 次导出机会。</p>
+<img style="width:50%" src="imazing.png" alt="使用 iMazing 导出微信 Documents 文件">
+
+<p>在 Documents 文件夹里，存在着至少一个以 Hash 字符串命名的文件夹，像这样的</p>
+<blockquote>
+<p>eb8a6093b56e2f1c27fbf471ee97c7f9</p>
+</blockquote>
+<p>这样的文件夹中就存放着微信用户的个人数据。如果在这个手机上登陆过多个微信，则可能存在多个这样的 Hash 命名的文件夹，如果不确定哪个是自己想要导出的，可以都导出看看。</p>
+<p>找到 <code>./Documents/&#123;hash&#125;/wc/wc005_008.db</code> 和 <code>./Documents/&#123;hash&#125;/DB/WCDB_Contact.sqlite</code>，这两个就是需要解析的缓存文件了。前者是和朋友圈数据相关的表格，后者是和好友数据相关的表，这里我们需要这张表只是为了解析出自己账户的头像。</p>
+<p>（踩过的坑：新版本的 Mac 不能通过 iTunes 备份了）</p>
+<h3 id="3-解析缓存"><a href="#3-解析缓存" class="headerlink" title="3. 解析缓存"></a>3. 解析缓存</h3><p>TL;DR 下载这个 <a target="_blank" rel="noopener" href="https://github.com/Atlasoin/wechat-moments-exporter">repo</a>，把 <code>wc005_008.db</code> 和 <code>WCDB_Contact.sqlite</code> 拖到根目录，修改 <code>main.py</code> 里的 hash 为你自己的 hash，然后运行 <code>python3 main.py</code> 即可导出一份 moments.json。</p>
+<p>关于脚本还需要特别说明的是：</p>
+<ol>
+<li><p>我在脚本中我设了一个 dl_img 的参数，如果为 True 的话会把所有图片都下载到本地。毕竟微信号都已经被封了，谁知道朋友圈的图片会被 host 到什么时候，况且如果频繁的站外访问朋友圈图片谁知道会发生什么，我建议趁还能下载的时候还是把图片都下载到本地比较保险。</p>
+</li>
+<li><p>对于分享链接类的 moment，我不仅解析了分享的链接本身，还解析了微信本身对这个链接缓存的图片&#x2F;标题&#x2F;简介，完全还原了朋友圈如何对一个链接的渲染。这样做是因为曾经分享的很多链接已经 404 了……如果只解析链接意义不大了，我觉得有必要把当时缓存的数据都解析出来，至少还原出“封皮”。</p>
+</li>
+</ol>
+<p>当然这个 repo 里的脚本之所以这样编写背后有很多的分析，我会简要介绍一遍，大家可以依照自己的兴趣选择是否跳过本节接下来的部分。</p>
+<p>首先微信使用的是 SQLlite 缓存，想要分析 wc005_008.db 这个数据库的话可以使用这款开源的 <a target="_blank" rel="noopener" href="https://sqlitebrowser.org/">sqlite browser</a>。经过简单分析，发现 db 里有大量 <code>MyWC01_</code> 开头的表，自己账户的朋友圈数据都存在 <code>MyWC01_&#123;$hash&#125;</code> 这张表里，$hash 还是刚才目录的那个 hash，这个 hash 应该是代表自己账户的某种 id，推测其他的 <code>MyWC01_...</code> 代表的是好友的朋友圈的数据。</p>
+<p>进入存储自己朋友圈数据的表，发现有两个字段非常重要，<code>Buffer</code> 和 <code>id</code>。如果以 utf-8 方式解码 Buffer 字段，可以看到有很多明文字段，有的是图片 url，有的是好友的名称，有的是之前发过的朋友圈内容。进而推测出从 Buffer 字段中我们可以恢复出朋友圈数据。</p>
+<p>这里稍微先偏离一下主线，说一下“以 utf-8 方式解码 Buffer 字段”这件事。我并没有在这款 <a target="_blank" rel="noopener" href="https://sqlitebrowser.org/">sqlite browser</a> 中看到有办法可以使用 utf8 方式解码二进制文件然后直接阅读，最后我的做法是把这个表中所有 Buffer 字段都写入文件，然后使用 hex viewer&#x2F;editor 来阅读分析。不过这其实也不顺利，我找了很多 hex viewer&#x2F;editor，都不支持 utf8 的解码方式，最后发现最好用的也是我发现的唯一支持 utf8 解析的软件是 <a target="_blank" rel="noopener" href="https://www.synalysis.net/">Synalyze It!</a>，但是这个软件仅有两周的免费试用，之后需要支付 9.99 美元。我不知道是否有更好的方法来分析，希望能够和大家交流。</p>
+<p>回到主线，我们继续分析 Buffer 字段，发现很难完整地理解这些数据的格式，但是尽管如此，我们完全可以根据一些固定的标识位识别出内容本身。</p>
+<p>不同的字段都有对应的标识 Flag，如图片&#x2F;内容&#x2F;分享的链接等，这些字段在 Buffer 中表现的格式基本都是先出现 Flag，紧跟其后的一到两个字节是标记 Message 长度的，再之后是 Message 本身。</p>
+<p>以正文内容为例，下图是两条朋友圈内容的二进制文件，观察后很容易发现，<code>b&#39;\xba\x01&#39;</code> 就是正文内容的标识符。</p>
+<p><img src="flag.webp" alt="flag"></p>
+<p>至此思路基本就清楚了，首先确认都有哪些字段需要解析（最终确认需要解析的字段有正文内容，图片链接，分享链接，分享链接渲染出的图片，分享链接渲染出的标题，分享链接渲染出的描述），然后识别出我们需要解析的字段的 flag，最后继续想办法解析 message 的长度和偏移量就好。</p>
+<p>但是还差最后一块拼图——发布时间。直觉来讲表格中的另外一个字段 <code>id</code> 和时间非常相关，因为这些数字随着实际时间一起递增，所以猜测是某种基于时间戳的算法，最后基本上确定了实际 create_time 和 id 的转换算法是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create_time = id / 8388607990</span><br></pre></td></tr></table></figure>
+
+<p>这个公式中的 magic number 8388607990 由 MyWC_Message01 推断而来。这是一张存储评论的表，虽然我们没有原内容的准确发布时间，但是从这张表的 create time 字段我们可以得知评论的实际发布时间。这张表中的另一个字段 id 对应的应该是原 post 的 id。</p>
+<p>我们可以简化的认为，每个 post 的第一个回复的 create time 和 id 之间的关系就是原 post 和 id 之间的关系，因为第一个回复的时间最接近原 post 实际的发布时间。那么我们可以直接取表中最大的 Id&#x2F;CreateTime 作为我们的魔法系数。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MAX</span>(ID<span class="operator">/</span>CreateTime) <span class="keyword">FROM</span> MyWC_Message01</span><br></pre></td></tr></table></figure>
+
+<p>实际上通过评论得出的魔法系数还是略微小了一点点，为了更精确，最后我又抽样几条自己的朋友圈数据，对照微信 app 前端显示的发布时间，进行一些微调，最终得出了 8388607990 这个数字。基本上这个公式可以保证和实际发布时间误差都在1分钟内。</p>
+<p>总之大概思路就是如此了。当然具体还有很多的细节，如果有兴趣可以直接参考代码的实现。</p>
+<p>（踩过的坑：最开始参考了这个 <a target="_blank" rel="noopener" href="https://github.com/Mr0x01/WeChatMomentExport-iOS">repo</a> 的代码很多，但是这个 repo 里的代码是按照 plist 格式解析 Buffer，而实际上现在版本的缓存不知道是什么格式但反正不是 plist 格式）</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>感谢前人栽的树：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Mr0x01/WeChatMomentExport-iOS">Mr0x01&#x2F;WeChatMomentExport-iOS</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/22474033">从 iPhone 备份中提取微信聊天记录</a></li>
+</ul>
+</div><div class="tags"><a href="../../../../tags/post"><i class="fa fa-tag">post</i></a><a href="../../../../tags/WeChat"><i class="fa fa-tag">WeChat</i></a><a href="../../../../tags/微信"><i class="fa fa-tag">微信</i></a><a href="../../../../tags/朋友圈"><i class="fa fa-tag">朋友圈</i></a><a href="../../../../tags/数据爬取"><i class="fa fa-tag">数据爬取</i></a></div><div class="post-nav"><a class="pre" href="../../../12/03/the-illness/">许久未曾如此大病一场</a><a class="next" href="../../../01/01/2022-summary/">2022：时代与命运 ｜ 写在 25 岁生日前</a></div><link rel="stylesheet" type="text/css" href="https://unpkg.com/disqusjs@1.3/dist/disqusjs.css"><script type="text/javascript" src="https://unpkg.com/disqusjs@1.3/dist/disqus.js"></script><script type="text/javascript" id="disqus-count-script">$(function() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '//disqus.com/next/config.json', true);
+  xhr.timeout = 2500;
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      $('.post-meta .post-comments-count').show();
+      var s = document.createElement('script');
+      s.id = 'dsq-count-scr';
+      s.src = 'https://Atlas.disqus.com/count.js';
+      s.async = true;
+      (document.head || document.body).appendChild(s);
+    }
+  };
+  xhr.ontimeout = function () { xhr.abort(); };
+  xhr.send(null);
+});</script><div class="comments" id="disqus_thread"><script type="text/javascript">// Load comments with DisqusJS
+function loadComments() {
+  window.dsqjs = new DisqusJS({
+    shortname: 'Atlas',
+    siteName: 'Atlas\' Blog',
+    identifier: '2023/11/01/how-to-export-moments/',
+    url: 'https://atlasquan.github.io/2023/11/01/how-to-export-moments/',
+    title: '如何导出朋友圈数据',
+    api: '',
+    apikey: 'o1pc9qjJIXWXhgiFEJpdNeby38nLGkt0XDwfHQ0leNgqgkztTMr3mBrppLznkr0N',
+    admin: '',
+    adminLabel: ''
+  });
+}
+// Lazy load {# Credit: https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/comments/disqus.swig #}
+(function () {
+  var offsetTop = document.getElementById('disqus_thread').offsetTop - window.innerHeight;
+  if (offsetTop <= 0) {
+    // Load directly when there's no scrollbar
+    window.addEventListener('load', loadComments, false);
+  } else {
+    var disqusScroll = function () {
+      // offsetTop may changes because of manually resizing browser window or lazy loading images
+      var offsetTop = document.getElementById('disqus_thread').offsetTop - window.innerHeight;
+      var scrollTop = window.scrollY;
+
+      // Pre-load comments a bit? (margin or anything else)
+      if (offsetTop - scrollTop < 60) {
+        window.removeEventListener('scroll', disqusScroll);
+        loadComments();
+      }
+    };
+    window.addEventListener('scroll', disqusScroll);
+  }
+})();
+// Scroll to comments automatically if #comment-xxx anchor specified
+window.addEventListener('load', function () {
+  // I don't know why, it just works.
+  window.setTimeout(function () {
+    if (location.hash.indexOf('#comment-') !== -1) {
+      document.getElementById('disqus_thread').scrollIntoView(true);
+    }
+  }, 100);
+}, false);
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://atlasquan.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="../../../../tags/post/" style="font-size: 15px;">post</a> <a href="../../../../tags/2022/" style="font-size: 15px;">2022</a> <a href="../../../../tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 15px;">年终总结</a> <a href="../../../../tags/2023/" style="font-size: 15px;">2023</a> <a href="../../../../tags/2024/" style="font-size: 15px;">2024</a> <a href="../../../../tags/2025/" style="font-size: 15px;">2025</a> <a href="../../../../tags/Misc/" style="font-size: 15px;">Misc</a> <a href="../../../../tags/Tablet/" style="font-size: 15px;">Tablet</a> <a href="../../../../tags/Linux/" style="font-size: 15px;">Linux</a> <a href="../../../../tags/Open-Source/" style="font-size: 15px;">Open Source</a> <a href="../../../../tags/Poem/" style="font-size: 15px;">Poem</a> <a href="../../../../tags/Embedded/" style="font-size: 15px;">Embedded</a> <a href="../../../../tags/Nucleo/" style="font-size: 15px;">Nucleo</a> <a href="../../../../tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 15px;">读书笔记</a> <a href="../../../../tags/Chitchat/" style="font-size: 15px;">Chitchat</a> <a href="../../../../tags/USB/" style="font-size: 15px;">USB</a> <a href="../../../../tags/%E8%87%AA%E8%AF%91/" style="font-size: 15px;">自译</a> <a href="../../../../tags/Security/" style="font-size: 15px;">Security</a> <a href="../../../../tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 15px;">互联网</a> <a href="../../../../tags/Blockchain/" style="font-size: 15px;">Blockchain</a> <a href="../../../../tags/WeChat/" style="font-size: 15px;">WeChat</a> <a href="../../../../tags/%E5%BE%AE%E4%BF%A1/" style="font-size: 15px;">微信</a> <a href="../../../../tags/%E6%9C%8B%E5%8F%8B%E5%9C%88/" style="font-size: 15px;">朋友圈</a> <a href="../../../../tags/%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/" style="font-size: 15px;">数据爬取</a> <a href="../../../../tags/%E6%B5%81%E6%84%9F/" style="font-size: 15px;">流感</a> <a href="../../../../tags/%E6%AD%BB%E4%BA%A1/" style="font-size: 15px;">死亡</a> <a href="../../../../tags/%E7%96%BE%E7%97%85/" style="font-size: 15px;">疾病</a> <a href="../../../../tags/%E8%87%AA%E7%94%B1/" style="font-size: 15px;">自由</a> <a href="../../../../tags/%E5%9B%9A%E7%A6%81/" style="font-size: 15px;">囚禁</a> <a href="../../../../tags/%E7%BE%9E%E8%80%BB/" style="font-size: 15px;">羞耻</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="../../../../2025/12/29/2025-summary/">2025：但求不虚此行</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2024/12/27/2024-summary/">2024：世有道则见，无道则隐</a></li><li class="post-list-item"><a class="post-list-link" href="../../../12/31/2023-summary/">2023: 活着就会看见</a></li><li class="post-list-item"><a class="post-list-link" href="../../../12/03/the-illness/">许久未曾如此大病一场</a></li><li class="post-list-item"><a class="post-list-link" href="">如何导出朋友圈数据</a></li><li class="post-list-item"><a class="post-list-link" href="../../../01/01/2022-summary/">2022：时代与命运 ｜ 写在 25 岁生日前</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2022/12/02/zhi-hou-shi-yi-zhong-bu-tong-yu-ma-mu-de-dai-zhi-%EF%BD%9C-na-shi-yi-chang-sheng-da-de-PUA/">之后是一种不同于麻木的呆滞｜那是一场盛大的 PUA</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2022/10/26/hao-hao-shuo-hua/">好好说话｜言语是最小单位的自由</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/10/17/anxiety-about-money/">当我在为钱焦虑的时候我在焦虑什么</a></li><li class="post-list-item"><a class="post-list-link" href="../../../../2021/09/27/human/">人可生如蝼蚁而美如神</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://coder109.github.io/" title="幻" target="_blank">幻</a><ul></ul><a href="https://printempw.github.io/" title="PRIN" target="_blank">PRIN</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2026 <a href="../../../../." rel="nofollow">Atlas' Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="../../../../js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="../../../../js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><script type="text/javascript" src="../../../../js/copycode.js?v=1.0.0" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="../../../../css/copycode.css?v=1.0.0"><script type="text/javascript" src="../../../../js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="../../../../js/smartresize.js?v=1.0.0"></script></div></body></html>
