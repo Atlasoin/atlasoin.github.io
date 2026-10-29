@@ -12,7 +12,7 @@ specifiers:
   hexo-renderer-ejs: ^2.0.0
   hexo-renderer-marked: ^5.0.0
   hexo-renderer-pug: ^3.0.0
-  hexo-renderer-sass-next: ^0.1.2
+  hexo-renderer-sass-next: ^0.1.3
   hexo-renderer-stylus: ^2.1.0
   hexo-server: ^3.0.0
   hexo-theme-landscape: ^0.0.3
@@ -38,7 +38,7 @@ dependencies:
 
 devDependencies:
   hexo-renderer-pug: 3.0.0
-  hexo-renderer-sass-next: 0.1.2
+  hexo-renderer-sass-next: 0.1.3
 
 packages:
 
@@ -1998,8 +1998,8 @@ packages:
       pug: 3.0.2
     dev: true
 
-  /hexo-renderer-sass-next/0.1.2:
-    resolution: {integrity: sha512-5JCdOyvZYsb3hVrY0EQpoP0eaz19nkC2d9S+grjMVX1qSzBSV51l1DM8OJ8PjMUQ8h/BtUVjsEnPjDR4r2sq6g==}
+  /hexo-renderer-sass-next/0.1.3:
+    resolution: {integrity: sha512-zCRzC+oPE/oLSVwy9eXPvlVrTI8eFybEDUWfJKc0brh0sYK0KoKd/RKX5UmNWCak6g8hzR2I1uZsJkhT9viAag==}
     dependencies:
       sass: 1.54.0
     dev: true
@@ -2236,37 +2236,6 @@ packages:
   /ip-regex/4.3.0:
     resolution: {integrity: sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==}
     engines: {node: '>=8'}
-    dev: false
-
-  /ipfs-car/0.6.2:
-    resolution: {integrity: sha512-tliuakkKKtCa4TTnFT3zJKjq/aD8EGKX8Y0ybCyrAW0fo/n2koZpxiLjBvtTs47Rqyji6ggXo+atPbJJ60hJmg==}
-    hasBin: true
-    dependencies:
-      '@ipld/car': 3.2.4
-      '@web-std/blob': 3.0.4
-      bl: 5.0.0
-      blockstore-core: 1.0.5
-      browser-readablestream-to-it: 1.0.3
-      idb-keyval: 6.2.0
-      interface-blockstore: 2.0.3
-      ipfs-core-types: 0.8.4
-      ipfs-core-utils: 0.12.2
-      ipfs-unixfs-exporter: 7.0.11
-      ipfs-unixfs-importer: 9.0.10
-      ipfs-utils: 9.0.7
-      it-all: 1.0.6
-      it-last: 1.0.6
-      it-pipe: 1.1.0
-      meow: 9.0.0
-      move-file: 2.1.0
-      multiformats: 9.9.0
-      stream-to-it: 0.2.4
-      streaming-iterables: 6.2.0
-      uint8arrays: 3.1.0
-    transitivePeerDependencies:
-      - encoding
-      - node-fetch
-      - supports-color
     dev: false
 
   /ipfs-car/0.7.0:
@@ -3161,28 +3130,6 @@ packages:
   /negotiator/0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
-    dev: false
-
-  /nft.storage/7.0.0:
-    resolution: {integrity: sha512-6ris9loxF9TNTPY/JghLzdLlvFV3UzWkUcVTfmrRn49jzDUfyT5wMhDmYRBQuknNFN1jf7jlSGNHixs5SpOoOA==}
-    dependencies:
-      '@ipld/car': 3.2.4
-      '@ipld/dag-cbor': 6.0.15
-      '@web-std/blob': 3.0.4
-      '@web-std/fetch': 3.0.3
-      '@web-std/file': 3.0.2
-      '@web-std/form-data': 3.0.2
-      carbites: 1.0.6
-      ipfs-car: 0.6.2
-      it-pipe: 1.1.0
-      multiformats: 9.9.0
-      p-retry: 4.6.2
-      streaming-iterables: 6.2.0
-      throttled-queue: 2.1.4
-    transitivePeerDependencies:
-      - encoding
-      - node-fetch
-      - supports-color
     dev: false
 
   /nib/1.2.0_stylus@0.57.0:
@@ -4473,12 +4420,12 @@ packages:
     resolution: {integrity: sha512-rFJYdHlk2C+pKAoV4Nlptb+b7nmBN5QOg8VkQVNMbK7jf/lDctaUF9nNehZqVoarDWS74nMpTWVDhWecWwoqQw==}
     engines: {node: '>=10.13.0'}
     dependencies:
+      JSONStream: 1.3.5
       bluebird: 3.7.2
       cuid: 2.1.8
       graceful-fs: 4.2.10
       hexo-log: 3.0.0
       is-plain-object: 5.0.0
-      JSONStream: 1.3.5
       rfdc: 1.3.0
     dev: false
 

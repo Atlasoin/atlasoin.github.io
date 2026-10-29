@@ -9,7 +9,7 @@
     "server": "hexo server"
   },
   "hexo": {
-    "version": "6.2.0"
+    "version": "6.3.0"
   },
   "dependencies": {
     "base-path-converter": "^1.0.2",
@@ -30,6 +30,6 @@
   },
   "devDependencies": {
     "hexo-renderer-pug": "^3.0.0",
-    "hexo-renderer-sass-next": "^0.1.2"
+    "hexo-renderer-sass-next": "^0.1.3"
   }
 }
